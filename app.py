@@ -970,7 +970,7 @@ if not st.session_state.submitted:
         pct = int((answered_count / 125) * 100) if answered_count else 0
 
         st.markdown("<br/>", unsafe_allow_html=True)
-        if mode == "Participant":
+    if mode == "Participant":
     st.markdown("<br/>", unsafe_allow_html=True)
     submitted = st.form_submit_button("⬡ ENVOYER MES RÉPONSES", use_container_width=True)
 
