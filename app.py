@@ -24,6 +24,33 @@ st.set_page_config(
 )
 
 # ─── AUTHENTIFICATION ─────────────────────────────
+def check_password():
+    def password_entered():
+        if hmac.compare_digest(
+            st.session_state["password"],
+            st.secrets["app_password"]
+        ):
+            st.session_state["authenticated"] = True
+            del st.session_state["password"]
+        else:
+            st.session_state["authenticated"] = False
+
+    if st.session_state.get("authenticated", False):
+        return True
+
+    st.markdown("### Accès questionnaire")
+    st.text_input(
+        "Mot de passe",
+        type="password",
+        on_change=password_entered,
+        key="password"
+    )
+
+    if "authenticated" in st.session_state and not st.session_state["authenticated"]:
+        st.error("Mot de passe incorrect")
+
+    return False
+
 def check_coach_password():
     def password_entered():
         if hmac.compare_digest(
@@ -73,6 +100,22 @@ def save_answers_to_csv(prenom, nom, answers, engagement=""):
             writer.writeheader()
         writer.writerow(row)
 
+st.markdown("### Accès")
+
+mode = st.radio(
+    "",
+    ["Participant", "Coach"],
+    horizontal=True
+)
+
+if mode == "Participant":
+    if not check_password():
+        st.stop()
+
+if mode == "Coach":
+    if not check_coach_password():
+        st.stop()
+    
     # Page de login
     st.markdown("""
     <style>
