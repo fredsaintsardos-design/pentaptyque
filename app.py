@@ -1069,7 +1069,7 @@ for dim_name, dim_data in DIMENSIONS_DATA.items():
 scores_100 = {d: score_sur_100(s) for d, s in scores_bruts.items()}
 
     # ── RADAR ─────────────────────────────────────────────────────────────
-    st.markdown("<br/>", unsafe_allow_html=True)
+st.markdown("<br/>", unsafe_allow_html=True)
 
 fig = go.Figure()
 
