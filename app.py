@@ -1070,61 +1070,59 @@ scores_100 = {d: score_sur_100(s) for d, s in scores_bruts.items()}
 
     # ── RADAR ─────────────────────────────────────────────────────────────
     st.markdown("<br/>", unsafe_allow_html=True)
-    fig = go.Figure()
-    theta = list(scores_100.keys()) + [list(scores_100.keys())[0]]
-    r_vals = list(scores_100.values()) + [list(scores_100.values())[0]]
 
-    fig.add_trace(go.Scatterpolar(
-        r=r_vals,
-        theta=theta,
-        fill='toself',
-        fillcolor='rgba(12,192,223,0.15)',
-        line=dict(color='#0cc0df', width=2.5),
-        marker=dict(color='#0cc0df', size=8),
-        name='Profil',
-    ))
-    fig.update_layout(
-        polar=dict(
-            bgcolor='white',
-            radialaxis=dict(
-                visible=True, range=[0, 100],
-                tickfont=dict(color='#6b7280', size=9),
-                gridcolor='#d1d5db',
-                tickvals=[20, 40, 60, 80, 100],
-                ticktext=['20', '40', '60', '80', '100'],
-            ),
-            angularaxis=dict(
-                tickfont=dict(color='#374151', size=11, family='Barlow'),
-                gridcolor='#d1d5db',
-                linecolor='#d1d5db',
-            ),
-            gridshape='linear',
+fig = go.Figure()
+
+theta = list(scores_100.keys()) + [list(scores_100.keys())[0]]
+r_vals = list(scores_100.values()) + [list(scores_100.values())[0]]
+
+fig.add_trace(go.Scatterpolar(
+    r=r_vals,
+    theta=theta,
+    fill='toself',
+    fillcolor='rgba(12,192,223,0.15)',
+    line=dict(color='#0cc0df', width=2.5),
+    marker=dict(color='#0cc0df', size=8),
+    name='Profil',
+))
+
+fig.update_layout(
+    polar=dict(
+        bgcolor='white',
+        radialaxis=dict(
+            visible=True,
+            range=[0, 100],
+            tickfont=dict(color='#6b7280', size=9),
+            gridcolor='#d1d5db',
+            tickvals=[20, 40, 60, 80, 100],
+            ticktext=['20', '40', '60', '80', '100'],
         ),
-        paper_bgcolor='white',
-        plot_bgcolor='white',
-        font=dict(color='#1f2933', family='Barlow'),
-        margin=dict(t=40, b=40, l=60, r=60),
-        height=420,
+        angularaxis=dict(
+            tickfont=dict(color='#374151', size=11),
+            gridcolor='#d1d5db',
+            linecolor='#d1d5db',
+        ),
+        gridshape='linear',
+    ),
+    paper_bgcolor='white',
+    plot_bgcolor='white',
+    font=dict(color='#1f2933'),
+    margin=dict(t=40, b=40, l=60, r=60),
+    height=420,
+    showlegend=False,
+)
+
+# Cercles de référence
+for level, color in [(60, '#f0a050'), (80, '#0cc0df')]:
+    fig.add_trace(go.Scatterpolar(
+        r=[level] * len(theta),
+        theta=theta,
+        mode='lines',
+        line=dict(color=color, width=1, dash='dot'),
         showlegend=False,
-    )
-    # Add reference rings
-    for level, color, label in [(60, '#f0a050', 'Zone à renforcer'), (80, '#0cc0df', "Zone d'appui")]:
-        fig.add_trace(go.Scatterpolar(
-            r=[level]*len(dims) + [level],
-            theta=theta,
-            mode='lines',
-            line=dict(color=color, width=1, dash='dot'),
-            name=label,
-            showlegend=True,
-        ))
-    fig.update_layout(
-        legend=dict(
-            font=dict(color='#888', size=9),
-            bgcolor='rgba(0,0,0,0)',
-            x=0.5, y=-0.1, xanchor='center',
-        )
-    )
-    st.plotly_chart(fig, use_container_width=True)
+    ))
+
+st.plotly_chart(fig, use_container_width=True)
 
     # ── SCORES GRID ───────────────────────────────────────────────────────
     st.markdown("<br/>", unsafe_allow_html=True)
