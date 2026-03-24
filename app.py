@@ -51,6 +51,7 @@ def check_password():
 
     return False
 
+
 def check_coach_password():
     def password_entered():
         if hmac.compare_digest(
@@ -77,21 +78,7 @@ def check_coach_password():
         st.error("Mot de passe coach incorrect")
 
     return False
-st.markdown("### Accès")
 
-mode = st.radio(
-    "",
-    ["Participant", "Coach"],
-    horizontal=True
-)
-
-if mode == "Participant":
-    if not check_password():
-        st.stop()
-
-if mode == "Coach":
-    if not check_coach_password():
-        st.stop()
 
 # ─── SAUVEGARDE DES RÉPONSES ──────────────────────
 def save_answers_to_csv(prenom, nom, answers, engagement=""):
@@ -114,6 +101,7 @@ def save_answers_to_csv(prenom, nom, answers, engagement=""):
             writer.writeheader()
         writer.writerow(row)
 
+# ─── CHOIX DU MODE ────────────────────────────────
 st.markdown("### Accès")
 
 mode = st.radio(
@@ -129,87 +117,7 @@ if mode == "Participant":
 if mode == "Coach":
     if not check_coach_password():
         st.stop()
-    
-    # Page de login
-    st.markdown("""
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@900&family=Barlow:wght@300;400;700&display=swap');
-    html, body, [class*="css"] { 
-    font-family: 'Barlow', sans-serif !important; 
-    background: #f7f9fb !important; 
-}
-    #MainMenu, footer, header { visibility: hidden; }
-    .block-container { max-width: 420px !important; padding-top: 10vh !important; }
-    div.stButton > button {
-        background: #0cc0df !important; color: #0a0a0a !important;
-        font-weight: 900 !important; letter-spacing: 3px !important;
-        text-transform: uppercase !important; font-size: 11px !important;
-        padding: 14px 40px !important; border: none !important;
-        border-radius: 0 !important; width: 100% !important;
-    }
-    div[data-testid="stTextInput"] input {
-    background: rgba(12,192,223,0.10) !important;
-    border: 2px solid #0cc0df !important;
-    border-radius: 6px !important;
-    color: #0f172a !important;
-    font-family: 'Barlow', sans-serif !important;
-    font-size: 14px !important;
-    padding: 12px !important;
-}
-
-div[data-testid="stTextInput"] input:focus {
-    border-color: #0cc0df !important;
-    box-shadow: 0 0 0 2px rgba(12,192,223,0.2) !important;
-}
-    div[data-testid="stTextInput"] input:focus { border-color: #0cc0df !important; box-shadow: none !important; }
-    </style>
-    """, unsafe_allow_html=True)
-
-    st.markdown("""
-<div style="text-align:center; margin-bottom: 40px;">
-    <div style="font-family:'Barlow Condensed', sans-serif; font-size:46px; font-weight:900; color:#0f172a; line-height:1;">
-        PENTAPTYQUE
-    </div>
-    <div style="font-size:9px; letter-spacing:4px; color:#555; text-transform:uppercase; margin-top:6px;">
-        REMATCH - Accès privé
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-    st.text_input(
-        "Mot de passe",
-        type="password",
-        placeholder="Entrez votre mot de passe",
-        on_change=password_entered,
-        key="password",
-        label_visibility="collapsed"
-    )
-
-    if "authenticated" in st.session_state and not st.session_state["authenticated"]:
-        st.markdown('<div style="color:#e05a5a; font-size:12px; text-align:center; margin-top:8px; letter-spacing:1px;">Mot de passe incorrect</div>', unsafe_allow_html=True)
-
-    st.markdown('<div style="font-size:10px; color:#333; text-align:center; margin-top:32px; letter-spacing:2px;">© REMATCH — Document confidentiel</div>', unsafe_allow_html=True)
-
-mode = st.radio(
-    "Accès",
-    ["Participant", "Coach"],
-    horizontal=True
-)
-if mode == "Participant":
-    if not check_password():
-        st.stop()
-
-if mode == "Coach":
-    if not check_coach_password():
-        st.stop()
-    
-    mode = st.radio(
-    "Accès",
-    ["Participant", "Coach"],
-    horizontal=True,
-    label_visibility="collapsed"
-)
-
+        
 # ─── CUSTOM CSS ───────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
