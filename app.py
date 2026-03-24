@@ -26,11 +26,14 @@ st.set_page_config(
 # ─── AUTHENTIFICATION ─────────────────────────────
 def check_password():
     def password_entered():
-        if hmac.compare_digest(
-            st.session_state["password"],
-            st.secrets["app_password"]
-        ):
+        identifiant = st.session_state.get("participant_id", "").strip().lower()
+        password = st.session_state.get("password", "")
+
+        expected_password = st.secrets["participant_passwords"].get(identifiant)
+
+        if expected_password and hmac.compare_digest(password, expected_password):
             st.session_state["authenticated"] = True
+            st.session_state["participant_id_valid"] = identifiant
             del st.session_state["password"]
         else:
             st.session_state["authenticated"] = False
@@ -39,15 +42,16 @@ def check_password():
         return True
 
     st.markdown("### Accès questionnaire")
+    st.text_input("Identifiant", key="participant_id")
     st.text_input(
         "Mot de passe",
         type="password",
-        on_change=password_entered,
-        key="password"
+        key="password",
+        on_change=password_entered
     )
 
     if "authenticated" in st.session_state and not st.session_state["authenticated"]:
-        st.error("Mot de passe incorrect")
+        st.error("Identifiant ou mot de passe incorrect")
 
     return False
 
