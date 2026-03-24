@@ -908,7 +908,6 @@ if not st.session_state.submitted:
 # ─── QUESTIONNAIRE ────────────────────────────────────────────────────────────
 if not st.session_state.submitted:
 
-    # Prénom
     col1, col2, col3 = st.columns([2, 2, 1])
     with col1:
         prenom = st.text_input("Prénom", placeholder="Votre prénom", label_visibility="visible")
@@ -928,7 +927,6 @@ if not st.session_state.submitted:
     """, unsafe_allow_html=True)
 
     q_global = 1
-    all_answered = True
 
     with st.form("pentaptyque_form"):
         for dim_idx, (dim_name, dim_data) in enumerate(DIMENSIONS_DATA.items()):
@@ -945,13 +943,19 @@ if not st.session_state.submitted:
                 for q_text in questions:
                     key = f"q_{q_global}"
                     col_num, col_q, col_radio = st.columns([0.35, 3.5, 2])
+
                     with col_num:
-                        st.markdown(f'<div class="q-num" style="padding-top:10px;">{q_global}.</div>', unsafe_allow_html=True)
+                        st.markdown(
+                            f'<div class="q-num" style="padding-top:10px;">{q_global}.</div>',
+                            unsafe_allow_html=True
+                        )
+
                     with col_q:
                         st.markdown(
-        f'<div style="font-size:17px;padding:16px 0;line-height:1.7;font-weight:500;color:#0f172a;">{q_text}</div>',
-        unsafe_allow_html=True
-    )
+                            f'<div style="font-size:17px;padding:16px 0;line-height:1.7;font-weight:500;color:#0f172a;">{q_text}</div>',
+                            unsafe_allow_html=True
+                        )
+
                     with col_radio:
                         val = st.radio(
                             label=f"q{q_global}",
@@ -962,43 +966,43 @@ if not st.session_state.submitted:
                             label_visibility="collapsed"
                         )
                         st.session_state.answers[key] = val
+
                     st.divider()
                     q_global += 1
 
-        # Progress indicator
         answered_count = len(st.session_state.answers)
-    pct = int((answered_count / 125) * 100) if answered_count else 0
+        pct = int((answered_count / 125) * 100) if answered_count else 0
 
-    st.markdown("<br/>", unsafe_allow_html=True)
+        st.markdown("<br/>", unsafe_allow_html=True)
 
-    if mode == "Participant":
-        submitted = st.form_submit_button(
-            "⬡ ENVOYER MES RÉPONSES",
-            use_container_width=True
-        )
-    else:
-        submitted = st.form_submit_button(
-            "⬡ CALCULER LE PROFIL",
-            use_container_width=True
-        )
+        if mode == "Participant":
+            submitted = st.form_submit_button(
+                "⬡ ENVOYER MES RÉPONSES",
+                use_container_width=True
+            )
+        else:
+            submitted = st.form_submit_button(
+                "⬡ CALCULER LE PROFIL",
+                use_container_width=True
+            )
 
-if submitted:
-    if mode == "Participant":
-        save_answers_to_csv(
-            prenom=prenom,
-            nom=nom,
-            answers=st.session_state.answers,
-            engagement=st.session_state.get("engagement", "")
-        )
-        st.success("Vos réponses ont bien été envoyées. Merci.")
-        st.info("Le coach préparera votre bilan personnalisé.")
-        st.stop()
+    if submitted:
+        if mode == "Participant":
+            save_answers_to_csv(
+                prenom=prenom,
+                nom=nom,
+                answers=st.session_state.answers,
+                engagement=st.session_state.get("engagement", "")
+            )
+            st.success("Vos réponses ont bien été envoyées. Merci.")
+            st.info("Le coach préparera votre bilan personnalisé.")
+            st.stop()
 
-    if mode == "Coach":
-        st.session_state.submitted = True
-        st.session_state.prenom = prenom
-        st.session_state.nom = nom
-        st.rerun()
+        if mode == "Coach":
+            st.session_state.submitted = True
+            st.session_state.prenom = prenom
+            st.session_state.nom = nom
+            st.rerun()
 
 # ─── RESULTS ──────────────────────────────────────────────────────────────────
 if mode == "Coach":
