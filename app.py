@@ -106,14 +106,14 @@ if not check_password():
 # ─── CUSTOM CSS ───────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700;900&family=Barlow+Condensed:wght@700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;900&family=Barlow+Condensed:wght@700;900&display=swap');
 
 :root {
-    --primary: #0cc0df;        /* Bleu REMATCH */
-    --primary-dark: #0b2a3a;   /* Bleu profond */
+    --primary: #0cc0df;
+    --primary-dark: #0b2a3a;
     --primary-light: rgba(12,192,223,0.10);
 
-    --background: #f7f9fb;     /* Fond général */
+    --background: #f7f9fb;
     --white: #ffffff;
     --text: #1f2933;
 
@@ -132,8 +132,17 @@ html, body, [class*="css"] {
 }
 
 /* Hide Streamlit default elements */
-#MainMenu, footer, header { visibility: hidden; }
-    /* Champ mot de passe */
+#MainMenu, footer, header {
+    visibility: hidden;
+}
+
+/* Largeur page */
+.block-container {
+    padding-top: 0 !important;
+    max-width: 900px !important;
+}
+
+/* Champ mot de passe */
 div[data-testid="stTextInput"] input {
     background: var(--primary-light) !important;
     border: 2px solid var(--primary) !important;
@@ -146,12 +155,8 @@ div[data-testid="stTextInput"] input:focus {
     border-color: var(--primary-dark) !important;
     box-shadow: 0 0 0 2px var(--primary-light) !important;
 }
-/* Largeur page */
-.block-container {
-    padding-top: 0 !important;
-    max-width: 900px !important;
-}
-/* TOP HEADER */
+
+/* Top header */
 .rematch-header {
     background: white;
     padding: 18px 36px;
@@ -161,6 +166,7 @@ div[data-testid="stTextInput"] input:focus {
     border-bottom: 1px solid var(--grey-light);
     margin: -1rem -1rem 0 -1rem;
 }
+
 .rematch-header .brand {
     color: var(--primary-dark);
     font-weight: 900;
@@ -168,6 +174,7 @@ div[data-testid="stTextInput"] input:focus {
     letter-spacing: 4px;
     font-family: 'Barlow Condensed', sans-serif;
 }
+
 .rematch-header .tag {
     color: var(--grey-dark);
     font-size: 10px;
@@ -175,14 +182,15 @@ div[data-testid="stTextInput"] input:focus {
     text-transform: uppercase;
 }
 
-/* ── HERO SECTION ── */
+/* Hero */
 .hero {
     background: linear-gradient(90deg, #eef3f7 0%, #f7f9fb 100%);
-    color: #0f172a;
+    color: var(--text);
     padding: 60px 36px 50px;
     margin: 0 -1rem 2rem -1rem;
-    border-bottom: 2px solid #0cc0df;
+    border-bottom: 2px solid var(--primary);
 }
+
 .hero h1 {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 68px;
@@ -192,7 +200,11 @@ div[data-testid="stTextInput"] input:focus {
     margin: 0 0 10px 0;
     line-height: 1;
 }
-.hero h1 span { color: var(--primary); }
+
+.hero h1 span {
+    color: var(--primary);
+}
+
 .hero .subtitle {
     font-size: 11px;
     letter-spacing: 4px;
@@ -200,21 +212,16 @@ div[data-testid="stTextInput"] input:focus {
     color: var(--grey-dark);
     margin-bottom: 20px;
 }
+
 .hero p {
-    font-size: 14px;
+    font-size: 16px;
     color: var(--text);
     line-height: 1.7;
-    max-width: 620px;
-    font-weight: 300;
+    max-width: 720px;
+    font-weight: 400;
 }
 
-/* ── PROGRESS ── */
-.progress-wrap { background: #f2f2f2; height: 4px; border-radius: 0; margin-bottom: 0; }
-.progress-fill { background: #0cc0df; height: 4px; transition: width 0.4s ease; }
-.progress-info { display: flex; justify-content: space-between; padding: 8px 0 20px 0; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #888; }
-.progress-pct { color: #0cc0df; font-weight: 900; font-size: 18px; }
-
-/* ── DIM HEADER ── */
+/* Dimension header */
 .dim-header {
     background: white;
     border-left: 5px solid var(--primary);
@@ -223,6 +230,7 @@ div[data-testid="stTextInput"] input:focus {
     border-radius: 0;
     box-shadow: 0 4px 14px rgba(0,0,0,0.04);
 }
+
 .dim-header .dim-num {
     font-size: 9px;
     letter-spacing: 3px;
@@ -231,6 +239,7 @@ div[data-testid="stTextInput"] input:focus {
     margin-bottom: 4px;
     font-weight: 700;
 }
+
 .dim-header .dim-title {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 28px;
@@ -238,6 +247,7 @@ div[data-testid="stTextInput"] input:focus {
     color: var(--primary-dark);
     margin-bottom: 4px;
 }
+
 .dim-header .dim-obj {
     font-size: 12px;
     color: var(--grey-dark);
@@ -245,26 +255,26 @@ div[data-testid="stTextInput"] input:focus {
     font-weight: 300;
 }
 
-/* ── SUB-SECTION ── */
-.sub-section-title { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: #888; font-weight: 700; border-bottom: 1px solid #f2f2f2; padding-bottom: 8px; margin: 20px 0 12px 0; }
-
-/* ── QUESTION ROW ── */
-.q-row { background: #f2f2f2; padding: 12px 16px; margin-bottom: 4px; border-left: 3px solid transparent; transition: border-color 0.15s; }
-.q-row:hover { border-left-color: #0cc0df; }
-.q-num { font-size: 11px; font-weight: 700; color: #aaa; }
-
-/* ── SCORE BADGE ── */
-.score-badge {
-    background: #0a0a0a;
-    color: #0cc0df;
-    padding: 18px 24px;
-    text-align: center;
-    border-top: 3px solid #0cc0df;
+/* Sections */
+.sub-section-title {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--grey-dark);
+    font-weight: 700;
+    border-bottom: 1px solid var(--grey-light);
+    padding-bottom: 8px;
+    margin: 28px 0 14px 0;
 }
-.score-badge .score-num { font-family: 'Barlow Condensed', sans-serif; font-size: 48px; font-weight: 900; line-height: 1; }
-.score-badge .score-label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: #555; margin-top: 4px; }
 
-/* ── RESULT CARDS ── */
+/* Questions */
+.q-num {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--grey-dark);
+}
+
+/* Result cards */
 .result-card {
     background: white;
     color: var(--text);
@@ -273,15 +283,47 @@ div[data-testid="stTextInput"] input:focus {
     border-left: 4px solid var(--primary);
     box-shadow: 0 4px 14px rgba(0,0,0,0.04);
 }
-.result-card.warn { border-left-color: #f0a050; }
-.result-card.danger { border-left-color: #e05a5a; }
-.result-card .dim-name { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: #555; margin-bottom: 4px; }
-.result-card .score-big { font-family: 'Barlow Condensed', sans-serif; font-size: 36px; font-weight: 900; color: #0cc0df; }
-.result-card.warn .score-big { color: #f0a050; }
-.result-card.danger .score-big { color: #e05a5a; }
-.result-card .interp { font-size: 12px; color: #aaa; font-weight: 300; line-height: 1.5; margin-top: 6px; }
 
-/* ── CROSS READ ── */
+.result-card.warn {
+    border-left-color: var(--warn);
+}
+
+.result-card.danger {
+    border-left-color: var(--danger);
+}
+
+.result-card .dim-name {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--grey-dark);
+    margin-bottom: 4px;
+}
+
+.result-card .score-big {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--primary);
+}
+
+.result-card.warn .score-big {
+    color: var(--warn);
+}
+
+.result-card.danger .score-big {
+    color: var(--danger);
+}
+
+.result-card .interp {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 400;
+    line-height: 1.6;
+    margin-top: 6px;
+}
+
+/* Cross cards */
 .cross-card {
     background: white;
     border-left: 3px solid var(--primary);
@@ -291,12 +333,75 @@ div[data-testid="stTextInput"] input:focus {
     line-height: 1.6;
     box-shadow: 0 4px 14px rgba(0,0,0,0.04);
 }
-.cross-card.warn { border-left-color: #f0a050; background: #fffbf5; }
-.cross-card.danger { border-left-color: #e05a5a; background: #fff8f8; }
 
-/* ── CTA BUTTON ── */
+.cross-card.warn {
+    border-left-color: var(--warn);
+    background: #fffbf5;
+}
+
+.cross-card.danger {
+    border-left-color: var(--danger);
+    background: #fff8f8;
+}
+
+/* Scale legend */
+.scale-legend {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+}
+
+.scale-item {
+    flex: 1;
+    background: white;
+    color: var(--grey-dark);
+    text-align: center;
+    padding: 8px 4px;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid var(--grey-light);
+}
+
+.scale-item span {
+    display: block;
+    color: var(--primary-dark);
+    font-size: 18px;
+    font-weight: 900;
+}
+
+/* Radio buttons */
+div[data-testid="stRadio"] > label {
+    display: none !important;
+}
+
+div[data-testid="stRadio"] div[role="radiogroup"] {
+    flex-direction: row !important;
+    gap: 8px !important;
+}
+
+div[data-testid="stRadio"] div[role="radiogroup"] label {
+    background: white !important;
+    border: 2px solid var(--grey-light) !important;
+    padding: 6px 14px !important;
+    border-radius: 0 !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    transition: all 0.15s !important;
+    min-width: 42px !important;
+    text-align: center !important;
+}
+
+div[data-testid="stRadio"] div[role="radiogroup"] label:has(input:checked) {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: #0a0a0a !important;
+}
+
+/* Buttons */
 div.stButton > button {
-    background: #0cc0df !important;
+    background: var(--primary) !important;
     color: #0a0a0a !important;
     font-weight: 900 !important;
     font-family: 'Barlow', sans-serif !important;
@@ -309,57 +414,26 @@ div.stButton > button {
     width: 100% !important;
     transition: background 0.15s !important;
 }
-div.stButton > button:hover { background: #09a8c4 !important; }
 
-/* ── SCALE LABELS ── */
-.scale-legend { display: flex; gap: 4px; margin-bottom: 16px; }
-.scale-item {
-    flex: 1;
-    background: white;
-    color: var(--grey-dark);
-    text-align: center;
-    padding: 8px 4px;
-    font-size: 9px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    border: 1px solid var(--grey-light);
-}
-.scale-item span {
-    display: block;
-    color: var(--primary-dark);
-    font-size: 18px;
-    font-weight: 900;
-}
-
-/* Radio buttons */
-div[data-testid="stRadio"] > label { display: none !important; }
-div[data-testid="stRadio"] div[role="radiogroup"] { flex-direction: row !important; gap: 8px !important; }
-div[data-testid="stRadio"] div[role="radiogroup"] label {
-    background: white !important;
-    border: 2px solid #c8c8c8 !important;
-    padding: 6px 14px !important;
-    border-radius: 0 !important;
-    font-size: 14px !important;
-    font-weight: 700 !important;
-    cursor: pointer !important;
-    transition: all 0.15s !important;
-    min-width: 42px !important;
-    text-align: center !important;
-}
-div[data-testid="stRadio"] div[role="radiogroup"] label:has(input:checked) {
-    background: #0cc0df !important;
-    border-color: #0cc0df !important;
-    color: #0a0a0a !important;
+div.stButton > button:hover {
+    background: var(--primary-dark) !important;
+    color: white !important;
 }
 
 /* Sidebar */
-section[data-testid="stSidebar"] { background: #0a0a0a !important; }
+section[data-testid="stSidebar"] {
+    background: white !important;
+}
 
 /* Divider */
-hr { border-color: #f2f2f2 !important; }
+hr {
+    border-color: var(--grey-light) !important;
+}
 
-/* Info boxes */
-.stAlert { border-radius: 0 !important; }
+/* Alerts */
+.stAlert {
+    border-radius: 0 !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
