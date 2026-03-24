@@ -1168,7 +1168,7 @@ if st.session_state.pdf_ready is not None:
     )
     # ── RESET ─────────────────────────────────────────────────────────────
     st.markdown("<br/>", unsafe_allow_html=True)
-    if st.button("↩  RECOMMENCER UN NOUVEAU QUESTIONNAIRE"):
+if st.button("↩  RECOMMENCER UN NOUVEAU QUESTIONNAIRE"):
     st.session_state.submitted = False
     st.session_state.answers = {}
     st.session_state.pdf_ready = None
