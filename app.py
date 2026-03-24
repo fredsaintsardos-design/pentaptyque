@@ -101,6 +101,13 @@ def save_answers_to_csv(prenom, nom, answers, engagement=""):
             writer.writeheader()
         writer.writerow(row)
 
+# ─── LECTURE DES RÉPONSES COACH ───────────────────
+def load_answers_from_csv():
+    filename = "reponses_pentaptyque.csv"
+    if not os.path.isfile(filename):
+        return pd.DataFrame()
+    return pd.read_csv(filename)
+
 # ─── CHOIX DU MODE ────────────────────────────────
 st.markdown("### Accès")
 
@@ -1006,8 +1013,36 @@ if not st.session_state.submitted:
 
 # ─── RESULTS ──────────────────────────────────────────────────────────────────
 if mode == "Coach":
-    prenom = st.session_state.get("prenom", "")
-    nom = st.session_state.get("nom", "")
+    df_answers = load_answers_from_csv()
+
+    if df_answers.empty:
+        st.warning("Aucune réponse enregistrée pour le moment.")
+        st.stop()
+
+    df_answers["client_label"] = (
+        df_answers["prenom"].fillna("").astype(str) + " " +
+        df_answers["nom"].fillna("").astype(str) + " — " +
+        df_answers["timestamp"].fillna("").astype(str)
+    )
+
+    selected_label = st.selectbox(
+        "Choisir un participant",
+        df_answers["client_label"].tolist()
+    )
+
+    selected_row = df_answers[df_answers["client_label"] == selected_label].iloc[-1]
+
+    prenom = selected_row["prenom"]
+    nom = selected_row["nom"]
+    engagement = selected_row.get("engagement", "")
+
+    answers = {}
+    for col in df_answers.columns:
+        if str(col).startswith("q_"):
+            try:
+                answers[col] = int(selected_row[col])
+            except:
+                answers[col] = 3
 
     # Hero results
     st.markdown(f"""
@@ -1026,7 +1061,7 @@ if mode == "Coach":
         for section_name, questions in dim_data["sections"].items():
             for _ in questions:
                 key = f"q_{q_global}"
-                scores_bruts[dim_name] += st.session_state.answers.get(key, 3)
+                scores_bruts[dim_name] += answers.get(key, 3)
                 q_global += 1
     scores_100 = {d: score_sur_100(s) for d, s in scores_bruts.items()}
 
