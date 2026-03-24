@@ -134,6 +134,11 @@ div[data-testid="stTextInput"] input:focus {
     st.markdown('<div style="font-size:10px; color:#333; text-align:center; margin-top:32px; letter-spacing:2px;">© REMATCH — Document confidentiel</div>', unsafe_allow_html=True)
     return False
 
+mode = st.radio(
+    "Accès",
+    ["Participant", "Coach"],
+    horizontal=True
+)
 if mode == "Participant":
     if not check_password():
         st.stop()
