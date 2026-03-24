@@ -967,15 +967,23 @@ if not st.session_state.submitted:
 
         # Progress indicator
         answered_count = len(st.session_state.answers)
-        pct = int((answered_count / 125) * 100) if answered_count else 0
+    pct = int((answered_count / 125) * 100) if answered_count else 0
 
-        st.markdown("<br/>", unsafe_allow_html=True)
-    
+    st.markdown("<br/>", unsafe_allow_html=True)
+
     if mode == "Participant":
-        st.markdown("<br/>", unsafe_allow_html=True)
-        submitted = st.form_submit_button("⬡ ENVOYER MES RÉPONSES", use_container_width=True)
+        submitted = st.form_submit_button(
+            "⬡ ENVOYER MES RÉPONSES",
+            use_container_width=True
+        )
+    else:
+        submitted = st.form_submit_button(
+            "⬡ CALCULER LE PROFIL",
+            use_container_width=True
+        )
 
-    if submitted:
+if submitted:
+    if mode == "Participant":
         save_answers_to_csv(
             prenom=prenom,
             nom=nom,
@@ -983,7 +991,14 @@ if not st.session_state.submitted:
             engagement=st.session_state.get("engagement", "")
         )
         st.success("Vos réponses ont bien été envoyées. Merci.")
+        st.info("Le coach préparera votre bilan personnalisé.")
         st.stop()
+
+    if mode == "Coach":
+        st.session_state.submitted = True
+        st.session_state.prenom = prenom
+        st.session_state.nom = nom
+        st.rerun()
 
 # ─── RESULTS ──────────────────────────────────────────────────────────────────
 if mode == "Coach":
