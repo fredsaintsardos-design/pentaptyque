@@ -756,20 +756,16 @@ if "pdf_ready" not in st.session_state:
     st.session_state.pdf_ready = None
 
 # ─── HEADER ───────────────────────────────────────────────────────────────────
-col_logo, col_title = st.columns([1, 4])
+col_logo, col_tag = st.columns([4, 2])
 
 with col_logo:
-    st.image("logo_rematch.png", width=80)
-
-with col_title:
-    col_logo, col_tag = st.columns([3, 2])
-
-with col_logo:
+    st.markdown('<div style="padding-top:10px;">', unsafe_allow_html=True)
     st.image("logo_rematch.png", width=260)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 with col_tag:
     st.markdown("""
-    <div style="text-align:right; padding-top:20px; font-size:12px; letter-spacing:3px; color:#6b7280;">
+    <div style="text-align:right; padding-top:24px; font-size:12px; letter-spacing:3px; color:#6b7280;">
         COACHING & PERFORMANCE
     </div>
     """, unsafe_allow_html=True)
@@ -870,12 +866,12 @@ else:
 
     # Hero results
     st.markdown(f"""
-    <div class="hero">
-      <div class="subtitle">Résultats — Audit 5D</div>
-      <h1>VOTRE PROFIL <span>5D</span></h1>
-      <p>Analyse complète de vos 5 dimensions — <strong style="color:white;">{prenom} {nom}</strong></p>
-    </div>
-    """, unsafe_allow_html=True)
+<div class="hero">
+  <div class="subtitle">Résultats</div>
+  <h1>VOTRE <span>PENTAPTYQUE</span></h1>
+  <p>Analyse complète de vos 5 dimensions — <strong style="color:#0f172a;">{prenom} {nom}</strong></p>
+</div>
+""", unsafe_allow_html=True)
 
     # Calculate scores
     dims = list(DIMENSIONS_DATA.keys())
@@ -1149,6 +1145,7 @@ else:
 
     filename = f"bilan_pentaptyque_{prenom}_{nom}.pdf".replace(" ", "_").replace("__", "_")
 
+    if st.session_state.pdf_ready is None:
     if st.button("⎙  PRÉPARER LE BILAN PDF", use_container_width=True):
         st.session_state.pdf_ready = build_pdf(
             prenom=prenom,
@@ -1159,22 +1156,23 @@ else:
             moyenne_globale=moyenne_globale,
             engagement=engagement,
         )
+        st.rerun()
 
-    if st.session_state.pdf_ready is not None:
-        st.download_button(
-            label="⬇  TÉLÉCHARGER LE BILAN PDF",
-            data=st.session_state.pdf_ready,
-            file_name=filename,
-            mime="application/pdf",
-            use_container_width=True,
-        )
+if st.session_state.pdf_ready is not None:
+    st.download_button(
+        label="⬇  TÉLÉCHARGER LE BILAN PDF",
+        data=st.session_state.pdf_ready,
+        file_name=filename,
+        mime="application/pdf",
+        use_container_width=True,
+    )
     # ── RESET ─────────────────────────────────────────────────────────────
     st.markdown("<br/>", unsafe_allow_html=True)
     if st.button("↩  RECOMMENCER UN NOUVEAU QUESTIONNAIRE"):
-        st.session_state.submitted = False
-        st.session_state.answers = {}
-        st.session_state.pdf_ready = None
-        st.rerun()
+    st.session_state.submitted = False
+    st.session_state.answers = {}
+    st.session_state.pdf_ready = None
+    st.rerun()
 
     st.markdown("""
     <div style="text-align:center;padding:32px 0 16px;font-size:9px;letter-spacing:3px;color:#555;text-transform:uppercase;">
