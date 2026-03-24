@@ -897,7 +897,7 @@ with col_tag:
     """, unsafe_allow_html=True)
 
 # ─── HERO ─────────────────────────────────────────────────────────────────────
-if not st.session_state.submitted:
+if mode == "Participant" and not st.session_state.submitted:
     st.markdown("""
     <div class="hero">
       <div class="subtitle">Audit de performance 5D</div>
@@ -911,6 +911,8 @@ if not st.session_state.submitted:
       </p>
     </div>
     """, unsafe_allow_html=True)
+
+submitted = False
 
 # ─── QUESTIONNAIRE ────────────────────────────────────────────────────────────
 if mode == "Participant" and not st.session_state.submitted:
