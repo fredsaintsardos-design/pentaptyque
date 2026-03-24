@@ -1126,9 +1126,9 @@ st.plotly_chart(fig, use_container_width=True)
 
     # ── SCORES GRID ───────────────────────────────────────────────────────
 st.markdown("<br/>", unsafe_allow_html=True)
-    cols = st.columns(5)
-    for i, (dim, score) in enumerate(scores_100.items()):
-        level, level_label, level_color = get_level(score)
+cols = st.columns(5)
+for i, (dim, score) in enumerate(scores_100.items()):
+    level, level_label, level_color = get_level(score)
         with cols[i]:
             st.markdown(f"""
             <div style="background:white;padding:20px 12px;text-align:center;border-top:3px solid {level_color};box-shadow:0 4px 14px rgba(0,0,0,0.04);">
