@@ -998,10 +998,11 @@ else:
     """, unsafe_allow_html=True)
 
     engagement = st.text_area(
-        "Premier engagement concret",
-        placeholder="Ex : bloquer 2 créneaux de récupération par semaine, clarifier mes 3 priorités du mois, remettre du mouvement physique, retravailler mon cap...",
-        height=120
-    )
+    "Premier engagement concret",
+    placeholder="Ex : bloquer 2 créneaux de récupération par semaine, clarifier mes 3 priorités du mois, remettre du mouvement physique, retravailler mon cap...",
+    height=120,
+    key="engagement"
+)
 
     if engagement:
         st.markdown(f"""
@@ -1025,7 +1026,7 @@ else:
         dimension_forte=dimension_forte,
         dimension_fragile=dimension_fragile,
         moyenne_globale=moyenne_globale,
-        engagement=engagement,
+        engagement=st.session_state.get("engagement", ""),
         radar_fig=fig,
     )
 
