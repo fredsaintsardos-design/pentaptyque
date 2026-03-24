@@ -78,7 +78,6 @@ def check_coach_password():
 
     return False
 
-
 # ─── SAUVEGARDE DES RÉPONSES ──────────────────────
 def save_answers_to_csv(prenom, nom, answers, engagement=""):
     filename = "reponses_pentaptyque.csv"
