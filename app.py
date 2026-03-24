@@ -582,12 +582,12 @@ def build_pdf(prenom, nom, scores_100, dimension_forte, dimension_fragile, moyen
 
         os.unlink(tmp_path)
 
-    except Exception:
-        if os.path.exists(tmp_path):
+     except Exception as e:
+        if 'tmp_path' in locals() and os.path.exists(tmp_path):
             os.unlink(tmp_path)
 
         pdf.setFont("Helvetica", 10)
-        pdf.drawString(left, y, "Le graphique radar n'a pas pu être intégré au PDF.")
+        pdf.drawString(left, y, f"Le graphique radar n'a pas pu être intégré au PDF : {str(e)[:120]}")
         y -= 20
 
     # Engagement
