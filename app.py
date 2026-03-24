@@ -147,18 +147,19 @@ html, body, [class*="css"] {
 
 /* ── HERO SECTION ── */
 .hero {
-    background: linear-gradient(135deg, #ffffff 0%, #eef8fb 100%);
-    color: var(--text);
-    padding: 48px 36px 40px;
+    background: linear-gradient(90deg, #eef3f7 0%, #f7f9fb 100%);
+    color: #0f172a;
+    padding: 60px 36px 50px;
     margin: 0 -1rem 2rem -1rem;
-    border-bottom: 1px solid var(--grey-light);
+    border-bottom: 2px solid #0cc0df;
 }
 .hero h1 {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 52px;
+    font-size: 68px;
     font-weight: 900;
+    letter-spacing: 1px;
     color: var(--primary-dark);
-    margin: 0 0 6px 0;
+    margin: 0 0 10px 0;
     line-height: 1;
 }
 .hero h1 span { color: var(--primary); }
@@ -761,10 +762,15 @@ with col_logo:
     st.image("logo_rematch.png", width=80)
 
 with col_title:
+    col_logo, col_tag = st.columns([3, 2])
+
+with col_logo:
+    st.image("logo_rematch.png", width=260)
+
+with col_tag:
     st.markdown("""
-    <div class="rematch-header">
-      <div class="brand">REMATCH</div>
-      <div class="tag">Coaching &amp; Performance</div>
+    <div style="text-align:right; padding-top:20px; font-size:12px; letter-spacing:3px; color:#6b7280;">
+        COACHING & PERFORMANCE
     </div>
     """, unsafe_allow_html=True)
 
@@ -827,7 +833,10 @@ if not st.session_state.submitted:
                     with col_num:
                         st.markdown(f'<div class="q-num" style="padding-top:10px;">{q_global}.</div>', unsafe_allow_html=True)
                     with col_q:
-                        st.markdown(f'<div style="font-size:13px;padding:10px 0;line-height:1.5;">{q_text}</div>', unsafe_allow_html=True)
+                        st.markdown(
+        f'<div style="font-size:17px;padding:16px 0;line-height:1.7;font-weight:500;color:#0f172a;">{q_text}</div>',
+        unsafe_allow_html=True
+    )
                     with col_radio:
                         val = st.radio(
                             label=f"q{q_global}",
