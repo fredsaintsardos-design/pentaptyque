@@ -1049,7 +1049,7 @@ else:
         unsafe_allow_html=True
     )
 
-     pdf_file = build_pdf(
+    pdf_file = build_pdf(
         prenom=prenom,
         nom=nom,
         scores_100=scores_100,
