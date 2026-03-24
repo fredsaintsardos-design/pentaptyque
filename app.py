@@ -133,15 +133,25 @@ html, body, [class*="css"] {
 
 /* Hide Streamlit default elements */
 #MainMenu, footer, header { visibility: hidden; }
-st.markdown("""
-<style>
+    /* Champ mot de passe */
+div[data-testid="stTextInput"] input {
+    background: var(--primary-light) !important;
+    border: 2px solid var(--primary) !important;
+    border-radius: 8px !important;
+    color: var(--text) !important;
+    padding: 12px !important;
+}
+
+div[data-testid="stTextInput"] input:focus {
+    border-color: var(--primary-dark) !important;
+    box-shadow: 0 0 0 2px var(--primary-light) !important;
+}
+/* Largeur page */
 .block-container {
     padding-top: 0 !important;
     max-width: 900px !important;
 }
-</style>
-""", unsafe_allow_html=True)
-/* - TOP HEADER - */
+/* TOP HEADER */
 .rematch-header {
     background: white;
     padding: 18px 36px;
