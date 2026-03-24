@@ -1058,7 +1058,7 @@ if mode == "Coach":
     </div>
     """, unsafe_allow_html=True)
 
-    # 5. CALCUL DES SCORES  ← C’EST ICI QUE VA TON BLOC
+    # 5. CALCUL DES SCORES
     dims = list(DIMENSIONS_DATA.keys())
     scores_bruts = {d: 0 for d in dims}
     q_global = 1
@@ -1102,6 +1102,8 @@ if mode == "Coach":
 
     st.plotly_chart(fig, use_container_width=True)
 
+if mode == "Coach":
+    
     # ── SCORES GRID ───────────────────────────────────────────────────────
 st.markdown("<br/>", unsafe_allow_html=True)
 cols = st.columns(5)
