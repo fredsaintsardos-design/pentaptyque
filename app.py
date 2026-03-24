@@ -79,9 +79,11 @@ div[data-testid="stTextInput"] input:focus {
   <div style="font-family:'Barlow Condensed',sans-serif; font-size:46px; font-weight:900; color:#0f172a; line-height:1;">
     PENTAPTYQUE
   </div>
-      <div style="font-size:9px; letter-spacing:4px; color:#555; text-transform:uppercase; margin-top:6px;">REMATCH — Accès privé</div>
-    </div>
-    """, unsafe_allow_html=True)
+  <div style="font-size:9px; letter-spacing:4px; color:#555; text-transform:uppercase; margin-top:6px;">
+    REMATCH - Accès privé
+  </div>
+</div>
+""", unsafe_allow_html=True)
 
     st.text_input(
         "Mot de passe",
