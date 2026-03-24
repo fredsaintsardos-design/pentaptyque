@@ -993,7 +993,7 @@ if mode == "Participant" and not st.session_state.submitted:
                 use_container_width=True
             )
 
-    if submitted and mode == "Participant":
+if submitted and mode == "Participant":
     save_answers_to_csv(
         prenom=prenom,
         nom=nom,
