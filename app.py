@@ -670,6 +670,8 @@ if "submitted" not in st.session_state:
     st.session_state.submitted = False
 if "prenom" not in st.session_state:
     st.session_state.prenom = ""
+if "pdf_ready" not in st.session_state:
+    st.session_state.pdf_ready = None
 
 # ─── HEADER ───────────────────────────────────────────────────────────────────
 st.markdown("""
@@ -1049,31 +1051,33 @@ else:
         unsafe_allow_html=True
     )
 
-    pdf_file = build_pdf(
-        prenom=prenom,
-        nom=nom,
-        scores_100=scores_100,
-        dimension_forte=dimension_forte,
-        dimension_fragile=dimension_fragile,
-        moyenne_globale=moyenne_globale,
-        engagement=engagement,
-    )
-
     filename = f"bilan_pentaptyque_{prenom}_{nom}.pdf".replace(" ", "_").replace("__", "_")
 
-    st.download_button(
-        label="⬇  TÉLÉCHARGER LE BILAN PDF",
-        data=pdf_file,
-        file_name=filename,
-        mime="application/pdf",
-        use_container_width=True,
-    )
+    if st.button("⎙  PRÉPARER LE BILAN PDF", use_container_width=True):
+        st.session_state.pdf_ready = build_pdf(
+            prenom=prenom,
+            nom=nom,
+            scores_100=scores_100,
+            dimension_forte=dimension_forte,
+            dimension_fragile=dimension_fragile,
+            moyenne_globale=moyenne_globale,
+            engagement=engagement,
+        )
 
+    if st.session_state.pdf_ready is not None:
+        st.download_button(
+            label="⬇  TÉLÉCHARGER LE BILAN PDF",
+            data=st.session_state.pdf_ready,
+            file_name=filename,
+            mime="application/pdf",
+            use_container_width=True,
+        )
     # ── RESET ─────────────────────────────────────────────────────────────
     st.markdown("<br/>", unsafe_allow_html=True)
     if st.button("↩  RECOMMENCER UN NOUVEAU QUESTIONNAIRE"):
         st.session_state.submitted = False
         st.session_state.answers = {}
+        st.session_state.pdf_ready = None
         st.rerun()
 
     st.markdown("""
