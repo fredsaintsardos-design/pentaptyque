@@ -133,8 +133,14 @@ html, body, [class*="css"] {
 
 /* Hide Streamlit default elements */
 #MainMenu, footer, header { visibility: hidden; }
-.block-container { padding-top: 0 !important; max-width: 900px !important; }
-
+st.markdown("""
+<style>
+.block-container {
+    padding-top: 0 !important;
+    max-width: 900px !important;
+}
+</style>
+""", unsafe_allow_html=True)
 /* ── TOP HEADER ── */
 .rematch-header {
     background: white;
