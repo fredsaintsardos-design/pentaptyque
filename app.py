@@ -5,6 +5,8 @@ import hmac
 import io
 import os
 import tempfile
+import csv
+from datetime import datetime
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -21,22 +23,55 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# ─── AUTHENTIFICATION ─────────────────────────────────────────────────────────
-def check_password():
-    """Vérifie le mot de passe. Retourne True si correct."""
-
+# ─── AUTHENTIFICATION ─────────────────────────────
+def check_coach_password():
     def password_entered():
         if hmac.compare_digest(
-            st.session_state["password"],
-            st.secrets["app_password"]
+            st.session_state["coach_password"],
+            st.secrets["coach_password"]
         ):
-            st.session_state["authenticated"] = True
-            del st.session_state["password"]
+            st.session_state["coach_authenticated"] = True
+            del st.session_state["coach_password"]
         else:
-            st.session_state["authenticated"] = False
+            st.session_state["coach_authenticated"] = False
 
-    if st.session_state.get("authenticated", False):
+    if st.session_state.get("coach_authenticated", False):
         return True
+
+    st.markdown("### Accès coach")
+    st.text_input(
+        "Mot de passe coach",
+        type="password",
+        on_change=password_entered,
+        key="coach_password"
+    )
+
+    if "coach_authenticated" in st.session_state and not st.session_state["coach_authenticated"]:
+        st.error("Mot de passe coach incorrect")
+
+    return False
+
+
+# ─── SAUVEGARDE DES RÉPONSES ──────────────────────
+def save_answers_to_csv(prenom, nom, answers, engagement=""):
+    filename = "reponses_pentaptyque.csv"
+
+    row = {
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "prenom": prenom,
+        "nom": nom,
+        "engagement": engagement,
+    }
+
+    row.update(answers)
+
+    file_exists = os.path.isfile(filename)
+
+    with open(filename, "a", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=row.keys())
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow(row)
 
     # Page de login
     st.markdown("""
@@ -99,8 +134,13 @@ div[data-testid="stTextInput"] input:focus {
     st.markdown('<div style="font-size:10px; color:#333; text-align:center; margin-top:32px; letter-spacing:2px;">© REMATCH — Document confidentiel</div>', unsafe_allow_html=True)
     return False
 
-if not check_password():
-    st.stop()
+if mode == "Participant":
+    if not check_password():
+        st.stop()
+
+if mode == "Coach":
+    if not check_coach_password():
+        st.stop()
     
     mode = st.radio(
     "Accès",
@@ -961,16 +1001,20 @@ if not st.session_state.submitted:
         pct = int((answered_count / 125) * 100) if answered_count else 0
 
         st.markdown("<br/>", unsafe_allow_html=True)
-        submitted = st.form_submit_button("⬡  CALCULER MON PROFIL PENTAPTYQUE", use_container_width=True)
+        submitted = st.form_submit_button("⬡  ENVOYER MES RÉPONSES", use_container_width=True)
 
     if submitted:
-        st.session_state.submitted = True
-        st.session_state.prenom = prenom
-        st.session_state.nom = nom
-        st.rerun()
+    save_answers_to_csv(
+        prenom=prenom,
+        nom=nom,
+        answers=st.session_state.answers,
+        engagement=st.session_state.get("engagement", "")
+    )
+    st.success("Vos réponses ont bien été envoyées. Merci.")
+    st.stop()
 
 # ─── RESULTS ──────────────────────────────────────────────────────────────────
-else:
+if mode == "Coach":
     prenom = st.session_state.get("prenom", "")
     nom = st.session_state.get("nom", "")
 
