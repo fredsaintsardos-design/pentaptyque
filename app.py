@@ -922,7 +922,7 @@ else:
     st.plotly_chart(fig, use_container_width=True)
 
     # ── SCORES GRID ───────────────────────────────────────────────────────
-     st.markdown("<br/>", unsafe_allow_html=True)
+    st.markdown("<br/>", unsafe_allow_html=True)
     cols = st.columns(5)
     for i, (dim, score) in enumerate(scores_100.items()):
         level, level_label, level_color = get_level(score)
