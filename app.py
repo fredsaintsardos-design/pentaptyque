@@ -1268,20 +1268,22 @@ if mode == "Coach":
         unsafe_allow_html=True
     )
 
+if mode == "Coach":
+
     filename = f"bilan_pentaptyque_{prenom}_{nom}.pdf".replace(" ", "_").replace("__", "_")
 
-if st.session_state.pdf_ready is None:
-    if st.button("⎙  PRÉPARER LE BILAN PDF", use_container_width=True):
-        st.session_state.pdf_ready = build_pdf(
-            prenom=prenom,
-            nom=nom,
-            scores_100=scores_100,
-            dimension_forte=dimension_forte,
-            dimension_fragile=dimension_fragile,
-            moyenne_globale=moyenne_globale,
-            engagement=engagement,
-        )
-        st.rerun()
+    if st.session_state.pdf_ready is None:
+        if st.button("PRÉPARER LE BILAN PDF", use_container_width=True):
+            st.session_state.pdf_ready = build_pdf(
+                prenom=prenom,
+                nom=nom,
+                scores_100=scores_100,
+                dimension_forte=dimension_forte,
+                dimension_fragile=dimension_fragile,
+                moyenne_globale=moyenne_globale,
+                engagement=engagement,
+            )
+            st.rerun()
 
 if st.session_state.pdf_ready is not None:
     st.download_button(
@@ -1292,12 +1294,13 @@ if st.session_state.pdf_ready is not None:
         use_container_width=True,
     )
     # ── RESET ─────────────────────────────────────────────────────────────
+if mode == "Coach":
     st.markdown("<br/>", unsafe_allow_html=True)
-if st.button("↩  RECOMMENCER UN NOUVEAU QUESTIONNAIRE"):
-    st.session_state.submitted = False
-    st.session_state.answers = {}
-    st.session_state.pdf_ready = None
-    st.rerun()
+    if st.button("↩ RECOMMENCER UN NOUVEAU QUESTIONNAIRE"):
+        st.session_state.submitted = False
+        st.session_state.answers = {}
+        st.session_state.pdf_ready = None
+        st.rerun()
 
     st.markdown("""
     <div style="text-align:center;padding:32px 0 16px;font-size:9px;letter-spacing:3px;color:#555;text-transform:uppercase;">
