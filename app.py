@@ -913,7 +913,7 @@ if not st.session_state.submitted:
     """, unsafe_allow_html=True)
 
 # ─── QUESTIONNAIRE ────────────────────────────────────────────────────────────
-if not st.session_state.submitted:
+if mode == "Participant" and not st.session_state.submitted:
 
     col1, col2, col3 = st.columns([2, 2, 1])
     with col1:
@@ -993,23 +993,22 @@ if not st.session_state.submitted:
                 use_container_width=True
             )
 
-    if submitted:
-        if mode == "Participant":
-            save_answers_to_csv(
-                prenom=prenom,
-                nom=nom,
-                answers=st.session_state.answers,
-                engagement=st.session_state.get("engagement", "")
-            )
-            st.success("Vos réponses ont bien été envoyées. Merci.")
-            st.info("Le coach préparera votre bilan personnalisé.")
-            st.stop()
+    if submitted and mode == "Participant":
+    save_answers_to_csv(
+        prenom=prenom,
+        nom=nom,
+        answers=st.session_state.answers,
+        engagement=st.session_state.get("engagement", "")
+    )
+    st.success("Vos réponses ont bien été envoyées. Merci.")
+    st.info("Le coach préparera votre bilan personnalisé.")
+    st.stop()
 
-        if mode == "Coach":
-            st.session_state.submitted = True
-            st.session_state.prenom = prenom
-            st.session_state.nom = nom
-            st.rerun()
+if submitted and mode == "Coach":
+    st.session_state.submitted = True
+    st.session_state.prenom = prenom
+    st.session_state.nom = nom
+    st.rerun()
 
 # ─── RESULTS ──────────────────────────────────────────────────────────────────
 if mode == "Coach":
