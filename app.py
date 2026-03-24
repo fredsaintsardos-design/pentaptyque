@@ -970,17 +970,19 @@ if not st.session_state.submitted:
         pct = int((answered_count / 125) * 100) if answered_count else 0
 
         st.markdown("<br/>", unsafe_allow_html=True)
-        submitted = st.form_submit_button("⬡  ENVOYER MES RÉPONSES", use_container_width=True)
+        if mode == "Participant":
+    st.markdown("<br/>", unsafe_allow_html=True)
+    submitted = st.form_submit_button("⬡ ENVOYER MES RÉPONSES", use_container_width=True)
 
-if submitted:
-    save_answers_to_csv(
-        prenom=prenom,
-        nom=nom,
-        answers=st.session_state.answers,
-        engagement=st.session_state.get("engagement", "")
-    )
-    st.success("Vos réponses ont bien été envoyées. Merci.")
-    st.stop()
+    if submitted:
+        save_answers_to_csv(
+            prenom=prenom,
+            nom=nom,
+            answers=st.session_state.answers,
+            engagement=st.session_state.get("engagement", "")
+        )
+        st.success("Vos réponses ont bien été envoyées. Merci.")
+        st.stop()
 
 # ─── RESULTS ──────────────────────────────────────────────────────────────────
 if mode == "Coach":
