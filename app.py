@@ -1049,15 +1049,15 @@ else:
         unsafe_allow_html=True
     )
 
-    pdf_file = build_pdf(
-    prenom=prenom,
-    nom=nom,
-    scores_100=scores_100,
-    dimension_forte=dimension_forte,
-    dimension_fragile=dimension_fragile,
-    moyenne_globale=moyenne_globale,
-    engagement=st.session_state.get("engagement", ""),
-)
+     pdf_file = build_pdf(
+        prenom=prenom,
+        nom=nom,
+        scores_100=scores_100,
+        dimension_forte=dimension_forte,
+        dimension_fragile=dimension_fragile,
+        moyenne_globale=moyenne_globale,
+        engagement=engagement,
+    )
 
     filename = f"bilan_pentaptyque_{prenom}_{nom}.pdf".replace(" ", "_").replace("__", "_")
 
