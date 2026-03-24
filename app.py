@@ -1014,12 +1014,15 @@ if submitted and mode == "Coach":
 
 # ─── RESULTS ──────────────────────────────────────────────────────────────────
 if mode == "Coach":
+
+    # 1. Charger le CSV
     df_answers = load_answers_from_csv()
 
     if df_answers.empty:
         st.warning("Aucune réponse enregistrée pour le moment.")
         st.stop()
 
+    # 2. Liste déroulante participants
     df_answers["client_label"] = (
         df_answers["prenom"].fillna("").astype(str) + " " +
         df_answers["nom"].fillna("").astype(str) + " — " +
@@ -1037,6 +1040,7 @@ if mode == "Coach":
     nom = selected_row["nom"]
     engagement = selected_row.get("engagement", "")
 
+    # 3. Reconstituer les réponses
     answers = {}
     for col in df_answers.columns:
         if str(col).startswith("q_"):
@@ -1045,84 +1049,58 @@ if mode == "Coach":
             except:
                 answers[col] = 3
 
-    # Hero results
+    # 4. HERO RESULTATS
     st.markdown(f"""
-<div class="hero">
-  <div class="subtitle">Résultats</div>
-  <h1>VOTRE <span>PENTAPTYQUE</span></h1>
-  <p>Analyse complète de vos 5 dimensions — <strong style="color:#0f172a;">{prenom} {nom}</strong></p>
-</div>
-""", unsafe_allow_html=True)
+    <div class="hero">
+      <div class="subtitle">Résultats</div>
+      <h1>VOTRE <span>PENTAPTYQUE</span></h1>
+      <p>Analyse complète de vos 5 dimensions — <strong style="color:#0f172a;">{prenom} {nom}</strong></p>
+    </div>
+    """, unsafe_allow_html=True)
 
-# Calculate scores
-dims = list(DIMENSIONS_DATA.keys())
-scores_bruts = {d: 0 for d in dims}
-q_global = 1
+    # 5. CALCUL DES SCORES  ← C’EST ICI QUE VA TON BLOC
+    dims = list(DIMENSIONS_DATA.keys())
+    scores_bruts = {d: 0 for d in dims}
+    q_global = 1
 
-for dim_name, dim_data in DIMENSIONS_DATA.items():
-    for section_name, questions in dim_data["sections"].items():
-        for _ in questions:
-            key = f"q_{q_global}"
-            scores_bruts[dim_name] += answers.get(key, 3)
-            q_global += 1
+    for dim_name, dim_data in DIMENSIONS_DATA.items():
+        for section_name, questions in dim_data["sections"].items():
+            for _ in questions:
+                key = f"q_{q_global}"
+                scores_bruts[dim_name] += answers.get(key, 3)
+                q_global += 1
 
-scores_100 = {d: score_sur_100(s) for d, s in scores_bruts.items()}
+    scores_100 = {d: score_sur_100(s) for d, s in scores_bruts.items()}
 
-    # ── RADAR ─────────────────────────────────────────────────────────────
-st.markdown("<br/>", unsafe_allow_html=True)
+    # 6. RADAR
+    st.markdown("<br/>", unsafe_allow_html=True)
+    fig = go.Figure()
+    theta = list(scores_100.keys()) + [list(scores_100.keys())[0]]
+    r_vals = list(scores_100.values()) + [list(scores_100.values())[0]]
 
-fig = go.Figure()
-
-theta = list(scores_100.keys()) + [list(scores_100.keys())[0]]
-r_vals = list(scores_100.values()) + [list(scores_100.values())[0]]
-
-fig.add_trace(go.Scatterpolar(
-    r=r_vals,
-    theta=theta,
-    fill='toself',
-    fillcolor='rgba(12,192,223,0.15)',
-    line=dict(color='#0cc0df', width=2.5),
-    marker=dict(color='#0cc0df', size=8),
-    name='Profil',
-))
-
-fig.update_layout(
-    polar=dict(
-        bgcolor='white',
-        radialaxis=dict(
-            visible=True,
-            range=[0, 100],
-            tickfont=dict(color='#6b7280', size=9),
-            gridcolor='#d1d5db',
-            tickvals=[20, 40, 60, 80, 100],
-            ticktext=['20', '40', '60', '80', '100'],
-        ),
-        angularaxis=dict(
-            tickfont=dict(color='#374151', size=11),
-            gridcolor='#d1d5db',
-            linecolor='#d1d5db',
-        ),
-        gridshape='linear',
-    ),
-    paper_bgcolor='white',
-    plot_bgcolor='white',
-    font=dict(color='#1f2933'),
-    margin=dict(t=40, b=40, l=60, r=60),
-    height=420,
-    showlegend=False,
-)
-
-# Cercles de référence
-for level, color in [(60, '#f0a050'), (80, '#0cc0df')]:
     fig.add_trace(go.Scatterpolar(
-        r=[level] * len(theta),
+        r=r_vals,
         theta=theta,
-        mode='lines',
-        line=dict(color=color, width=1, dash='dot'),
-        showlegend=False,
+        fill='toself',
+        fillcolor='rgba(12,192,223,0.15)',
+        line=dict(color='#0cc0df', width=2.5),
+        marker=dict(color='#0cc0df', size=8),
+        name='Profil',
     ))
 
-st.plotly_chart(fig, use_container_width=True)
+    fig.update_layout(
+        polar=dict(
+            bgcolor='white',
+            radialaxis=dict(
+                visible=True, range=[0, 100],
+                tickvals=[20, 40, 60, 80, 100],
+            ),
+        ),
+        height=420,
+        showlegend=False,
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
 
     # ── SCORES GRID ───────────────────────────────────────────────────────
 st.markdown("<br/>", unsafe_allow_html=True)
