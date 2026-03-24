@@ -6,6 +6,9 @@ import io
 import os
 import tempfile
 
+import numpy as np
+import matplotlib.pyplot as plt
+
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
@@ -512,7 +515,36 @@ def get_level(score):
 def score_sur_100(brut):
     return round((brut / 125) * 100)
 
-def build_pdf(prenom, nom, scores_100, dimension_forte, dimension_fragile, moyenne_globale, engagement, radar_fig):
+def build_radar_image(scores_100):
+    labels = list(scores_100.keys())
+    values = list(scores_100.values())
+
+    angles = np.linspace(0, 2 * np.pi, len(labels), endpoint=False).tolist()
+    values += values[:1]
+    angles += angles[:1]
+
+    fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
+    fig.patch.set_facecolor("white")
+    ax.set_facecolor("white")
+
+    ax.plot(angles, values, linewidth=2)
+    ax.fill(angles, values, alpha=0.25)
+
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(labels, fontsize=10)
+    ax.set_yticks([20, 40, 60, 80, 100])
+    ax.set_yticklabels(["20", "40", "60", "80", "100"], fontsize=8)
+    ax.set_ylim(0, 100)
+
+    img_buffer = io.BytesIO()
+    plt.tight_layout()
+    plt.savefig(img_buffer, format="png", dpi=200, bbox_inches="tight")
+    plt.close(fig)
+    img_buffer.seek(0)
+
+    return img_buffer
+
+def build_pdf(prenom, nom, scores_100, dimension_forte, dimension_fragile, moyenne_globale, engagement):
     buffer = io.BytesIO()
     pdf = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
@@ -558,14 +590,11 @@ def build_pdf(prenom, nom, scores_100, dimension_forte, dimension_fragile, moyen
 
     y -= 10
 
-    # Radar chart
+    # Radar chart via matplotlib
     try:
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmpfile:
-            tmp_path = tmpfile.name
+        radar_buffer = build_radar_image(scores_100)
+        image = ImageReader(radar_buffer)
 
-        radar_fig.write_image(tmp_path, width=900, height=700)
-
-        image = ImageReader(tmp_path)
         img_width = 420
         img_height = 320
 
@@ -587,12 +616,7 @@ def build_pdf(prenom, nom, scores_100, dimension_forte, dimension_fragile, moyen
         )
         y -= img_height + 20
 
-        os.unlink(tmp_path)
-
     except Exception as e:
-        if 'tmp_path' in locals() and os.path.exists(tmp_path):
-            os.unlink(tmp_path)
-
         pdf.setFont("Helvetica", 10)
         pdf.drawString(left, y, f"Radar non intégré : {str(e)[:120]}")
         y -= 20
@@ -632,7 +656,6 @@ def build_pdf(prenom, nom, scores_100, dimension_forte, dimension_fragile, moyen
             pdf.showPage()
             y = top
 
-    # Footer
     pdf.setFont("Helvetica", 9)
     pdf.drawString(left, 30, "© REMATCH — Bilan Pentaptyque")
 
@@ -1011,6 +1034,8 @@ else:
     key="engagement"
 )
 
+     st.session_state["engagement"] = engagement
+
     if engagement:
         st.markdown(f"""
         <div class="cross-card">
@@ -1027,15 +1052,14 @@ else:
     )
 
     pdf_file = build_pdf(
-        prenom=prenom,
-        nom=nom,
-        scores_100=scores_100,
-        dimension_forte=dimension_forte,
-        dimension_fragile=dimension_fragile,
-        moyenne_globale=moyenne_globale,
-        engagement=st.session_state.get("engagement", ""),
-        radar_fig=fig,
-    )
+    prenom=prenom,
+    nom=nom,
+    scores_100=scores_100,
+    dimension_forte=dimension_forte,
+    dimension_fragile=dimension_fragile,
+    moyenne_globale=moyenne_globale,
+    engagement=st.session_state.get("engagement", ""),
+)
 
     filename = f"bilan_pentaptyque_{prenom}_{nom}.pdf".replace(" ", "_").replace("__", "_")
 
