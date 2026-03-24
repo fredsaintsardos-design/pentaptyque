@@ -1145,7 +1145,7 @@ else:
 
     filename = f"bilan_pentaptyque_{prenom}_{nom}.pdf".replace(" ", "_").replace("__", "_")
 
-    if st.session_state.pdf_ready is None:
+if st.session_state.pdf_ready is None:
     if st.button("⎙  PRÉPARER LE BILAN PDF", use_container_width=True):
         st.session_state.pdf_ready = build_pdf(
             prenom=prenom,
