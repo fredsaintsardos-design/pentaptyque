@@ -77,6 +77,21 @@ def check_coach_password():
         st.error("Mot de passe coach incorrect")
 
     return False
+st.markdown("### Accès")
+
+mode = st.radio(
+    "",
+    ["Participant", "Coach"],
+    horizontal=True
+)
+
+if mode == "Participant":
+    if not check_password():
+        st.stop()
+
+if mode == "Coach":
+    if not check_coach_password():
+        st.stop()
 
 # ─── SAUVEGARDE DES RÉPONSES ──────────────────────
 def save_answers_to_csv(prenom, nom, answers, engagement=""):
