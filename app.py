@@ -616,29 +616,29 @@ def build_radar_image(scores_100):
 
 def build_pdf(prenom, nom, scores_100, dimension_forte, dimension_fragile, moyenne_globale, engagement):
     buffer = io.BytesIO()
-pdf = canvas.Canvas(buffer, pagesize=A4)
-width, height = A4
+    pdf = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
 
-left = 50
-top = height - 50
-y = top
+    left = 50
+    top = height - 50
+    y = top
 
-# Logo
-try:
-    pdf.drawImage("logo_rematch.png", 50, height - 90, width=120, preserveAspectRatio=True, mask='auto')
-except:
-    pass
+    # Logo
+    try:
+        pdf.drawImage("logo_rematch.png", 50, height - 90, width=120, preserveAspectRatio=True, mask='auto')
+    except:
+        pass
 
-y = top - 40
+    y = top - 40
 
-# Titre
-pdf.setTitle("Bilan Pentaptyque REMATCH")
-from reportlab.lib import colors
-pdf.setFillColor(colors.HexColor("#0cc0df"))
-pdf.setFont("Helvetica-Bold", 20)
-pdf.drawString(left, y, "BILAN PENTAPTYQUE — REMATCH")
-pdf.setFillColor(colors.black)
-y -= 24
+    # Titre
+    from reportlab.lib import colors
+    pdf.setTitle("Bilan Pentaptyque REMATCH")
+    pdf.setFillColor(colors.HexColor("#0cc0df"))
+    pdf.setFont("Helvetica-Bold", 20)
+    pdf.drawString(left, y, "BILAN PENTAPTYQUE — REMATCH")
+    pdf.setFillColor(colors.black)
+    y -= 24
 
     pdf.setFont("Helvetica", 10)
     pdf.drawString(left, y, "Document confidentiel")
