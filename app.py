@@ -1054,8 +1054,8 @@ if mode == "Coach":
 </div>
 """, unsafe_allow_html=True)
 
-    # Calculate scores
-    dims = list(DIMENSIONS_DATA.keys())
+# Calculate scores
+dims = list(DIMENSIONS_DATA.keys())
 scores_bruts = {d: 0 for d in dims}
 q_global = 1
 
