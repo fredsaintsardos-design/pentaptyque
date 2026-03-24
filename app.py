@@ -42,7 +42,10 @@ def check_password():
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@900&family=Barlow:wght@300;400;700&display=swap');
-    html, body, [class*="css"] { font-family: 'Barlow', sans-serif !important; background: #0a0a0a !important; }
+    html, body, [class*="css"] { 
+    font-family: 'Barlow', sans-serif !important; 
+    background: #f7f9fb !important; 
+}
     #MainMenu, footer, header { visibility: hidden; }
     .block-container { max-width: 420px !important; padding-top: 10vh !important; }
     div.stButton > button {
@@ -53,20 +56,29 @@ def check_password():
         border-radius: 0 !important; width: 100% !important;
     }
     div[data-testid="stTextInput"] input {
-        background: #111 !important; border: 1px solid #333 !important;
-        border-radius: 0 !important; color: white !important;
-        font-family: 'Barlow', sans-serif !important; font-size: 14px !important;
-        padding: 12px !important;
-    }
+    background: rgba(12,192,223,0.10) !important;
+    border: 2px solid #0cc0df !important;
+    border-radius: 6px !important;
+    color: #0f172a !important;
+    font-family: 'Barlow', sans-serif !important;
+    font-size: 14px !important;
+    padding: 12px !important;
+}
+
+div[data-testid="stTextInput"] input:focus {
+    border-color: #0cc0df !important;
+    box-shadow: 0 0 0 2px rgba(12,192,223,0.2) !important;
+}
     div[data-testid="stTextInput"] input:focus { border-color: #0cc0df !important; box-shadow: none !important; }
     </style>
     """, unsafe_allow_html=True)
 
     st.markdown("""
-    <div style="text-align:center; margin-bottom: 40px;">
-      <div style="font-family:'Barlow Condensed',sans-serif; font-size:42px; font-weight:900; color:white; line-height:1;">
-        PENTA<span style="color:#0cc0df;">PTYQUE</span>
-      </div>
+    st.markdown("""
+<div style="text-align:center; margin-bottom: 40px;">
+  <div style="font-family:'Barlow Condensed',sans-serif; font-size:46px; font-weight:900; color:#0f172a; line-height:1;">
+    PENTAPTYQUE
+  </div>
       <div style="font-size:9px; letter-spacing:4px; color:#555; text-transform:uppercase; margin-top:6px;">REMATCH — Accès privé</div>
     </div>
     """, unsafe_allow_html=True)
