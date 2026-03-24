@@ -517,7 +517,6 @@ def build_pdf(prenom, nom, scores_100, dimension_forte, dimension_fragile, moyen
     pdf = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
 
-    # Marges et positions
     left = 50
     top = height - 50
     y = top
@@ -564,7 +563,7 @@ def build_pdf(prenom, nom, scores_100, dimension_forte, dimension_fragile, moyen
         with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmpfile:
             tmp_path = tmpfile.name
 
-        radar_fig.write_image(tmp_path, format="png", width=900, height=700, scale=2)
+        radar_fig.write_image(tmp_path, width=900, height=700)
 
         image = ImageReader(tmp_path)
         img_width = 420
@@ -577,17 +576,25 @@ def build_pdf(prenom, nom, scores_100, dimension_forte, dimension_fragile, moyen
         pdf.setFont("Helvetica-Bold", 12)
         pdf.drawString(left, y, "Profil visuel")
         y -= 18
-        pdf.drawImage(image, left, y - img_height, width=img_width, height=img_height, preserveAspectRatio=True, mask='auto')
+        pdf.drawImage(
+            image,
+            left,
+            y - img_height,
+            width=img_width,
+            height=img_height,
+            preserveAspectRatio=True,
+            mask='auto'
+        )
         y -= img_height + 20
 
         os.unlink(tmp_path)
 
-     except Exception as e:
+    except Exception as e:
         if 'tmp_path' in locals() and os.path.exists(tmp_path):
             os.unlink(tmp_path)
 
         pdf.setFont("Helvetica", 10)
-        pdf.drawString(left, y, f"Le graphique radar n'a pas pu être intégré au PDF : {str(e)[:120]}")
+        pdf.drawString(left, y, f"Radar non intégré : {str(e)[:120]}")
         y -= 20
 
     # Engagement
