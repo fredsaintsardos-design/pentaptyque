@@ -2,6 +2,13 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import hmac
+import io
+import os
+import tempfile
+
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.utils import ImageReader
+from reportlab.pdfgen import canvas
 
 # ─── PAGE CONFIG ──────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -505,6 +512,127 @@ def get_level(score):
 def score_sur_100(brut):
     return round((brut / 125) * 100)
 
+def build_pdf(prenom, nom, scores_100, dimension_forte, dimension_fragile, moyenne_globale, engagement, radar_fig):
+    buffer = io.BytesIO()
+    pdf = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
+
+    # Marges et positions
+    left = 50
+    top = height - 50
+    y = top
+
+    # Titre
+    pdf.setTitle("Bilan Pentaptyque REMATCH")
+    pdf.setFont("Helvetica-Bold", 20)
+    pdf.drawString(left, y, "BILAN PENTAPTYQUE — REMATCH")
+    y -= 24
+
+    pdf.setFont("Helvetica", 10)
+    pdf.drawString(left, y, "Document confidentiel")
+    y -= 28
+
+    # Identité
+    pdf.setFont("Helvetica-Bold", 12)
+    pdf.drawString(left, y, "Participant")
+    y -= 16
+
+    pdf.setFont("Helvetica", 11)
+    pdf.drawString(left, y, f"Nom : {prenom} {nom}".strip())
+    y -= 16
+    pdf.drawString(left, y, f"Score global : {moyenne_globale}/100")
+    y -= 16
+    pdf.drawString(left, y, f"Dimension d'appui dominante : {dimension_forte} ({scores_100[dimension_forte]}/100)")
+    y -= 16
+    pdf.drawString(left, y, f"Dimension prioritaire à renforcer : {dimension_fragile} ({scores_100[dimension_fragile]}/100)")
+    y -= 28
+
+    # Scores
+    pdf.setFont("Helvetica-Bold", 12)
+    pdf.drawString(left, y, "Scores par dimension")
+    y -= 18
+
+    pdf.setFont("Helvetica", 11)
+    for dim, score in scores_100.items():
+        pdf.drawString(left, y, f"- {dim} : {score}/100")
+        y -= 15
+
+    y -= 10
+
+    # Radar chart
+    try:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmpfile:
+            tmp_path = tmpfile.name
+
+        radar_fig.write_image(tmp_path, format="png", width=900, height=700, scale=2)
+
+        image = ImageReader(tmp_path)
+        img_width = 420
+        img_height = 320
+
+        if y - img_height < 80:
+            pdf.showPage()
+            y = top
+
+        pdf.setFont("Helvetica-Bold", 12)
+        pdf.drawString(left, y, "Profil visuel")
+        y -= 18
+        pdf.drawImage(image, left, y - img_height, width=img_width, height=img_height, preserveAspectRatio=True, mask='auto')
+        y -= img_height + 20
+
+        os.unlink(tmp_path)
+
+    except Exception:
+        if os.path.exists(tmp_path):
+            os.unlink(tmp_path)
+
+        pdf.setFont("Helvetica", 10)
+        pdf.drawString(left, y, "Le graphique radar n'a pas pu être intégré au PDF.")
+        y -= 20
+
+    # Engagement
+    if y < 140:
+        pdf.showPage()
+        y = top
+
+    pdf.setFont("Helvetica-Bold", 12)
+    pdf.drawString(left, y, "Premier engagement")
+    y -= 18
+
+    pdf.setFont("Helvetica", 11)
+    engagement_text = engagement.strip() if engagement else "Non renseigné"
+
+    max_chars = 95
+    words = engagement_text.split()
+    lines = []
+    current_line = ""
+
+    for word in words:
+        test_line = f"{current_line} {word}".strip()
+        if len(test_line) <= max_chars:
+            current_line = test_line
+        else:
+            lines.append(current_line)
+            current_line = word
+
+    if current_line:
+        lines.append(current_line)
+
+    for line in lines:
+        pdf.drawString(left, y, line)
+        y -= 15
+        if y < 60:
+            pdf.showPage()
+            y = top
+
+    # Footer
+    pdf.setFont("Helvetica", 9)
+    pdf.drawString(left, 30, "© REMATCH — Bilan Pentaptyque")
+
+    pdf.save()
+    buffer.seek(0)
+    return buffer
+
 # ─── INIT SESSION STATE ───────────────────────────────────────────────────────
 if "answers" not in st.session_state:
     st.session_state.answers = {}
@@ -834,6 +962,82 @@ else:
         bargap=0.35,
     )
     st.plotly_chart(fig2, use_container_width=True)
+
+    # ── SYNTHÈSE COACHING ───────────────────────────────────────────────
+    st.markdown("<br/>", unsafe_allow_html=True)
+    st.markdown(
+        '<div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#888;font-weight:700;border-bottom:2px solid #0a0a0a;padding-bottom:10px;margin-bottom:20px;">SYNTHÈSE COACHING</div>',
+        unsafe_allow_html=True
+    )
+
+    moyenne_globale = round(sum(scores_100.values()) / len(scores_100))
+    dimension_forte = max(scores_100, key=scores_100.get)
+    dimension_fragile = min(scores_100, key=scores_100.get)
+
+    pistes = {
+        "Physique": "retrouver de l'énergie, améliorer la récupération et remettre du mouvement dans le quotidien",
+        "Mental": "clarifier les priorités, alléger la charge mentale et renforcer le focus",
+        "Émotionnel": "mieux réguler les tensions, identifier les déclencheurs émotionnels et renforcer la stabilité intérieure",
+        "Sens": "retrouver du cap, réaligner les actions avec les valeurs et redonner de la perspective",
+        "Comportemental": "transformer plus nettement les intentions en actions concrètes et installer des routines d'exécution",
+    }
+
+    st.markdown(f"""
+    <div class="cross-card">
+      <strong>Score global :</strong> {moyenne_globale}/100<br/>
+      <strong>Dimension d'appui dominante :</strong> {dimension_forte} ({scores_100[dimension_forte]}/100)<br/>
+      <strong>Dimension prioritaire à renforcer :</strong> {dimension_fragile} ({scores_100[dimension_fragile]}/100)
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown(f"""
+    <div class="cross-card warn">
+      <strong>Hypothèse de travail prioritaire</strong><br/>
+      La priorité actuelle semble être de <strong>{pistes[dimension_fragile]}</strong>.
+    </div>
+    """, unsafe_allow_html=True)
+
+    engagement = st.text_area(
+        "Premier engagement concret",
+        placeholder="Ex : bloquer 2 créneaux de récupération par semaine, clarifier mes 3 priorités du mois, remettre du mouvement physique, retravailler mon cap...",
+        height=120
+    )
+
+    if engagement:
+        st.markdown(f"""
+        <div class="cross-card">
+          <strong>Engagement formulé</strong><br/>
+          {engagement}
+        </div>
+        """, unsafe_allow_html=True)
+
+    # ── EXPORT PDF ─────────────────────────────────────────────────────
+    st.markdown("<br/>", unsafe_allow_html=True)
+    st.markdown(
+        '<div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#888;font-weight:700;border-bottom:2px solid #0a0a0a;padding-bottom:10px;margin-bottom:20px;">EXPORT</div>',
+        unsafe_allow_html=True
+    )
+
+    pdf_file = build_pdf(
+        prenom=prenom,
+        nom=nom,
+        scores_100=scores_100,
+        dimension_forte=dimension_forte,
+        dimension_fragile=dimension_fragile,
+        moyenne_globale=moyenne_globale,
+        engagement=engagement,
+        radar_fig=fig,
+    )
+
+    filename = f"bilan_pentaptyque_{prenom}_{nom}.pdf".replace(" ", "_").replace("__", "_")
+
+    st.download_button(
+        label="⬇  TÉLÉCHARGER LE BILAN PDF",
+        data=pdf_file,
+        file_name=filename,
+        mime="application/pdf",
+        use_container_width=True,
+    )
 
     # ── RESET ─────────────────────────────────────────────────────────────
     st.markdown("<br/>", unsafe_allow_html=True)
