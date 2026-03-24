@@ -1102,7 +1102,7 @@ if mode == "Coach":
 
     st.plotly_chart(fig, use_container_width=True)
 
-if mode == "Coach":
+    if mode == "Coach":
     
     # ── SCORES GRID ───────────────────────────────────────────────────────
 st.markdown("<br/>", unsafe_allow_html=True)
