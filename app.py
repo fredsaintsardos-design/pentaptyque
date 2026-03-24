@@ -1003,7 +1003,7 @@ if not st.session_state.submitted:
         st.markdown("<br/>", unsafe_allow_html=True)
         submitted = st.form_submit_button("⬡  ENVOYER MES RÉPONSES", use_container_width=True)
 
-    if submitted:
+if submitted:
     save_answers_to_csv(
         prenom=prenom,
         nom=nom,
