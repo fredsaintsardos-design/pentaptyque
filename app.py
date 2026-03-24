@@ -95,22 +95,26 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700;900&family=Barlow+Condensed:wght@700;900&display=swap');
 
 :root {
-    --cyan: #0cc0df;
-    --cyan-dark: #09a8c4;
-    --cyan-light: rgba(12,192,223,0.10);
-    --black: #0a0a0a;
+    --primary: #0cc0df;        /* Bleu REMATCH */
+    --primary-dark: #0b2a3a;   /* Bleu profond */
+    --primary-light: rgba(12,192,223,0.10);
+
+    --background: #f7f9fb;     /* Fond général */
     --white: #ffffff;
-    --grey: #f2f2f2;
-    --grey-mid: #c8c8c8;
-    --grey-dark: #888;
-    --danger: #e05a5a;
-    --warn: #f0a050;
+    --text: #1f2933;
+
+    --grey-light: #e5e7eb;
+    --grey-mid: #9ca3af;
+    --grey-dark: #4b5563;
+
+    --danger: #ef4444;
+    --warn: #f59e0b;
 }
 
 html, body, [class*="css"] {
     font-family: 'Barlow', sans-serif !important;
-    background-color: var(--white) !important;
-    color: var(--black) !important;
+    background-color: var(--background) !important;
+    color: var(--text) !important;
 }
 
 /* Hide Streamlit default elements */
@@ -182,11 +186,12 @@ html, body, [class*="css"] {
 
 /* ── RESULT CARDS ── */
 .result-card {
-    background: #0a0a0a;
-    color: white;
+    background: white;
+    color: var(--text);
     padding: 22px 20px;
-    margin-bottom: 8px;
-    border-left: 5px solid #0cc0df;
+    margin-bottom: 10px;
+    border-left: 4px solid var(--primary);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.04);
 }
 .result-card.warn { border-left-color: #f0a050; }
 .result-card.danger { border-left-color: #e05a5a; }
@@ -198,12 +203,13 @@ html, body, [class*="css"] {
 
 /* ── CROSS READ ── */
 .cross-card {
-    background: #f8f8f8;
-    border-left: 3px solid #0cc0df;
-    padding: 14px 16px;
-    margin-bottom: 6px;
-    font-size: 12px;
+    background: white;
+    border-left: 3px solid var(--primary);
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    font-size: 13px;
     line-height: 1.6;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.04);
 }
 .cross-card.warn { border-left-color: #f0a050; background: #fffbf5; }
 .cross-card.danger { border-left-color: #e05a5a; background: #fff8f8; }
