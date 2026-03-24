@@ -123,29 +123,59 @@ html, body, [class*="css"] {
 
 /* ── TOP HEADER ── */
 .rematch-header {
-    background: #0a0a0a;
+    background: white;
     padding: 18px 36px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 3px solid #0cc0df;
+    border-bottom: 1px solid var(--grey-light);
     margin: -1rem -1rem 0 -1rem;
 }
-.rematch-header .brand { color: #0cc0df; font-weight: 900; font-size: 22px; letter-spacing: 4px; font-family: 'Barlow Condensed', sans-serif; }
-.rematch-header .tag { color: #888; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; }
+.rematch-header .brand {
+    color: var(--primary-dark);
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+}
+.rematch-header .tag {
+    color: var(--grey-dark);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
 
 /* ── HERO SECTION ── */
 .hero {
-    background: #0a0a0a;
-    color: white;
+    background: linear-gradient(135deg, #ffffff 0%, #eef8fb 100%);
+    color: var(--text);
     padding: 48px 36px 40px;
     margin: 0 -1rem 2rem -1rem;
-    border-bottom: 2px solid #0cc0df;
+    border-bottom: 1px solid var(--grey-light);
 }
-.hero h1 { font-family: 'Barlow Condensed', sans-serif; font-size: 52px; font-weight: 900; color: white; margin: 0 0 6px 0; line-height: 1; }
-.hero h1 span { color: #0cc0df; }
-.hero .subtitle { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #888; margin-bottom: 20px; }
-.hero p { font-size: 14px; color: #bbb; line-height: 1.7; max-width: 620px; font-weight: 300; }
+.hero h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 52px;
+    font-weight: 900;
+    color: var(--primary-dark);
+    margin: 0 0 6px 0;
+    line-height: 1;
+}
+.hero h1 span { color: var(--primary); }
+.hero .subtitle {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--grey-dark);
+    margin-bottom: 20px;
+}
+.hero p {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+    max-width: 620px;
+    font-weight: 300;
+}
 
 /* ── PROGRESS ── */
 .progress-wrap { background: #f2f2f2; height: 4px; border-radius: 0; margin-bottom: 0; }
@@ -155,15 +185,34 @@ html, body, [class*="css"] {
 
 /* ── DIM HEADER ── */
 .dim-header {
-    background: #0a0a0a;
-    border-left: 5px solid #0cc0df;
+    background: white;
+    border-left: 5px solid var(--primary);
     padding: 20px 24px;
     margin: 24px 0 20px 0;
     border-radius: 0;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.04);
 }
-.dim-header .dim-num { font-size: 9px; letter-spacing: 3px; color: #0cc0df; text-transform: uppercase; margin-bottom: 4px; font-weight: 700; }
-.dim-header .dim-title { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 900; color: white; margin-bottom: 4px; }
-.dim-header .dim-obj { font-size: 12px; color: #888; font-style: italic; font-weight: 300; }
+.dim-header .dim-num {
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--primary);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+.dim-header .dim-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--primary-dark);
+    margin-bottom: 4px;
+}
+.dim-header .dim-obj {
+    font-size: 12px;
+    color: var(--grey-dark);
+    font-style: italic;
+    font-weight: 300;
+}
 
 /* ── SUB-SECTION ── */
 .sub-section-title { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: #888; font-weight: 700; border-bottom: 1px solid #f2f2f2; padding-bottom: 8px; margin: 20px 0 12px 0; }
@@ -233,8 +282,23 @@ div.stButton > button:hover { background: #09a8c4 !important; }
 
 /* ── SCALE LABELS ── */
 .scale-legend { display: flex; gap: 4px; margin-bottom: 16px; }
-.scale-item { flex: 1; background: #0a0a0a; color: #888; text-align: center; padding: 8px 4px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; }
-.scale-item span { display: block; color: #0cc0df; font-size: 18px; font-weight: 900; }
+.scale-item {
+    flex: 1;
+    background: white;
+    color: var(--grey-dark);
+    text-align: center;
+    padding: 8px 4px;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid var(--grey-light);
+}
+.scale-item span {
+    display: block;
+    color: var(--primary-dark);
+    font-size: 18px;
+    font-weight: 900;
+}
 
 /* Radio buttons */
 div[data-testid="stRadio"] > label { display: none !important; }
@@ -816,24 +880,24 @@ else:
     ))
     fig.update_layout(
         polar=dict(
-            bgcolor='#0a0a0a',
+            bgcolor='white',
             radialaxis=dict(
                 visible=True, range=[0, 100],
-                tickfont=dict(color='#555', size=9),
-                gridcolor='#222',
+                tickfont=dict(color='#6b7280', size=9),
+                gridcolor='#d1d5db',
                 tickvals=[20, 40, 60, 80, 100],
                 ticktext=['20', '40', '60', '80', '100'],
             ),
             angularaxis=dict(
-                tickfont=dict(color='#ccc', size=11, family='Barlow'),
-                gridcolor='#222',
-                linecolor='#333',
+                tickfont=dict(color='#374151', size=11, family='Barlow'),
+                gridcolor='#d1d5db',
+                linecolor='#d1d5db',
             ),
             gridshape='linear',
         ),
-        paper_bgcolor='#0a0a0a',
-        plot_bgcolor='#0a0a0a',
-        font=dict(color='white', family='Barlow'),
+        paper_bgcolor='white',
+        plot_bgcolor='white',
+        font=dict(color='#1f2933', family='Barlow'),
         margin=dict(t=40, b=40, l=60, r=60),
         height=420,
         showlegend=False,
@@ -858,16 +922,16 @@ else:
     st.plotly_chart(fig, use_container_width=True)
 
     # ── SCORES GRID ───────────────────────────────────────────────────────
-    st.markdown("<br/>", unsafe_allow_html=True)
+     st.markdown("<br/>", unsafe_allow_html=True)
     cols = st.columns(5)
     for i, (dim, score) in enumerate(scores_100.items()):
         level, level_label, level_color = get_level(score)
         with cols[i]:
             st.markdown(f"""
-            <div style="background:#0a0a0a;padding:20px 12px;text-align:center;border-top:3px solid {level_color};">
-              <div style="font-size:9px;letter-spacing:2px;color:#555;text-transform:uppercase;margin-bottom:8px;">{DIMENSIONS_DATA[dim]['icon']} {dim}</div>
+            <div style="background:white;padding:20px 12px;text-align:center;border-top:3px solid {level_color};box-shadow:0 4px 14px rgba(0,0,0,0.04);">
+              <div style="font-size:9px;letter-spacing:2px;color:#6b7280;text-transform:uppercase;margin-bottom:8px;">{DIMENSIONS_DATA[dim]['icon']} {dim}</div>
               <div style="font-size:44px;font-weight:900;color:{level_color};font-family:'Barlow Condensed',sans-serif;line-height:1;">{score}</div>
-              <div style="font-size:9px;color:#555;margin-top:4px;">/100</div>
+              <div style="font-size:9px;color:#9ca3af;margin-top:4px;">/100</div>
               <div style="font-size:8px;letter-spacing:1px;color:{level_color};margin-top:8px;text-transform:uppercase;">{level_label.split(' ', 1)[1] if ' ' in level_label else level_label}</div>
             </div>
             """, unsafe_allow_html=True)
@@ -989,11 +1053,11 @@ else:
     fig2.add_hline(y=80, line_dash="dot", line_color="#0cc0df", line_width=1, annotation_text="Zone d'appui (80)", annotation_font_color="#0cc0df", annotation_font_size=9)
     fig2.add_hline(y=60, line_dash="dot", line_color="#f0a050", line_width=1, annotation_text="Zone à renforcer (60)", annotation_font_color="#f0a050", annotation_font_size=9)
     fig2.update_layout(
-        paper_bgcolor='#0a0a0a',
-        plot_bgcolor='#0a0a0a',
-        font=dict(color='white', family='Barlow'),
-        xaxis=dict(tickfont=dict(color='#ccc', size=11), gridcolor='#222', linecolor='#333'),
-        yaxis=dict(range=[0, 115], tickfont=dict(color='#555', size=9), gridcolor='#1a1a1a', zerolinecolor='#333'),
+        paper_bgcolor='white',
+        plot_bgcolor='white',
+        font=dict(color='#1f2933', family='Barlow'),
+        xaxis=dict(tickfont=dict(color='#374151', size=11), gridcolor='#e5e7eb', linecolor='#d1d5db'),
+        yaxis=dict(range=[0, 115], tickfont=dict(color='#6b7280', size=9), gridcolor='#e5e7eb', zerolinecolor='#d1d5db'),
         margin=dict(t=30, b=20, l=20, r=20),
         height=340,
         showlegend=False,
