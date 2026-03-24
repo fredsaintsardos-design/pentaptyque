@@ -1056,15 +1056,17 @@ if mode == "Coach":
 
     # Calculate scores
     dims = list(DIMENSIONS_DATA.keys())
-    scores_bruts = {d: 0 for d in dims}
-    q_global = 1
-    for dim_name, dim_data in DIMENSIONS_DATA.items():
-        for section_name, questions in dim_data["sections"].items():
-            for _ in questions:
-                key = f"q_{q_global}"
-                scores_bruts[dim_name] += answers.get(key, 3)
-                q_global += 1
-    scores_100 = {d: score_sur_100(s) for d, s in scores_bruts.items()}
+scores_bruts = {d: 0 for d in dims}
+q_global = 1
+
+for dim_name, dim_data in DIMENSIONS_DATA.items():
+    for section_name, questions in dim_data["sections"].items():
+        for _ in questions:
+            key = f"q_{q_global}"
+            scores_bruts[dim_name] += answers.get(key, 3)
+            q_global += 1
+
+scores_100 = {d: score_sur_100(s) for d, s in scores_bruts.items()}
 
     # ── RADAR ─────────────────────────────────────────────────────────────
     st.markdown("<br/>", unsafe_allow_html=True)
