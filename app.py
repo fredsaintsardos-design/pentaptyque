@@ -101,6 +101,13 @@ div[data-testid="stTextInput"] input:focus {
 
 if not check_password():
     st.stop()
+    
+    mode = st.radio(
+    "Accès",
+    ["Participant", "Coach"],
+    horizontal=True,
+    label_visibility="collapsed"
+)
 
 # ─── CUSTOM CSS ───────────────────────────────────────────────────────────────
 st.markdown("""
