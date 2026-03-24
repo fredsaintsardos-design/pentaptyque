@@ -141,7 +141,7 @@ st.markdown("""
 }
 </style>
 """, unsafe_allow_html=True)
-/* ── TOP HEADER ── */
+/* - TOP HEADER - */
 .rematch-header {
     background: white;
     padding: 18px 36px;
