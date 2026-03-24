@@ -1129,15 +1129,15 @@ st.markdown("<br/>", unsafe_allow_html=True)
 cols = st.columns(5)
 for i, (dim, score) in enumerate(scores_100.items()):
     level, level_label, level_color = get_level(score)
-        with cols[i]:
-            st.markdown(f"""
-            <div style="background:white;padding:20px 12px;text-align:center;border-top:3px solid {level_color};box-shadow:0 4px 14px rgba(0,0,0,0.04);">
-              <div style="font-size:9px;letter-spacing:2px;color:#6b7280;text-transform:uppercase;margin-bottom:8px;">{DIMENSIONS_DATA[dim]['icon']} {dim}</div>
-              <div style="font-size:44px;font-weight:900;color:{level_color};font-family:'Barlow Condensed',sans-serif;line-height:1;">{score}</div>
-              <div style="font-size:9px;color:#9ca3af;margin-top:4px;">/100</div>
-              <div style="font-size:8px;letter-spacing:1px;color:{level_color};margin-top:8px;text-transform:uppercase;">{level_label.split(' ', 1)[1] if ' ' in level_label else level_label}</div>
-            </div>
-            """, unsafe_allow_html=True)
+    with cols[i]:
+        st.markdown(f"""
+         <div style="background:white;padding:20px 12px;text-align:center;border-top:3px solid {level_color};box-shadow:0 4px 14px rgba(0,0,0,0.04);">
+            <div style="font-size:9px;letter-spacing:2px;color:#6b7280;text-transform:uppercase;margin-bottom:8px;">{DIMENSIONS_DATA[dim]['icon']} {dim}</div>
+            <div style="font-size:44px;font-weight:900;color:{level_color};font-family:'Barlow Condensed',sans-serif;line-height:1;">{score}</div>
+            <div style="font-size:9px;color:#9ca3af;margin-top:4px;">/100</div>
+            <div style="font-size:8px;letter-spacing:1px;color:{level_color};margin-top:8px;text-transform:uppercase;">{level_label.split(' ', 1)[1] if ' ' in level_label else level_label}</div>
+        </div>
+        """, unsafe_allow_html=True)
 
     # ── DIMENSION BY DIMENSION ────────────────────────────────────────────
     st.markdown("<br/><br/>", unsafe_allow_html=True)
